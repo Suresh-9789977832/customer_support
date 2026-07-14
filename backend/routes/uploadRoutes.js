@@ -5,6 +5,6 @@ const router = express.Router()
 
 router.post('/upload',uploadfile)
 
-
+router.post("/chat", askquestion);
 
 export default router

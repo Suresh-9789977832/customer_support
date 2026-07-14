@@ -59,38 +59,43 @@ export const uploadfile = async() =>{
   }
 }
 
-export const askquestion = async() =>{
-     const { question } = req.body;
+export const askquestion = async (req, res) => {
+  try {
+    const { question } = req.body;
 
-  const queryEmbedding = await getEmbedding(question);
+    const queryEmbedding = await getEmbedding(question);
 
-  const chunks = await ChunkModel.find();
+    const chunks = await ChunkModel.find();
 
-  const scoredChunks = chunks.map((chunk) => ({
-    text: chunk.chunkText,
-    score: cosineSimilarity(
-      queryEmbedding,
-      chunk.embedding
-    ),
-  }));
+    const scoredChunks = chunks.map((chunk) => ({
+      text: chunk.chunkText,
+      score: cosineSimilarity(
+        queryEmbedding,
+        chunk.embedding
+      ),
+    }));
 
-  scoredChunks.sort((a, b) => b.score - a.score);
+    scoredChunks.sort((a, b) => b.score - a.score);
 
-  const topChunks = scoredChunks.slice(0, 3);
+    const topChunks = scoredChunks.slice(0, 3);
 
-  const context = topChunks
-  .map(chunk => chunk.text)
-  .join("\n\n");
+    const context = topChunks
+      .map((chunk) => chunk.text)
+      .join("\n\n");
 
-  const answer = await askDeepSeek(
-  question,
-  context
-);
+    const answer = await askDeepSeek(question, context);
 
-res.json({
-  answer,
-});
-}
+    res.json({
+      answer,
+      contextUsed: topChunks,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      error: error.message,
+    });
+  }
+};
 
 export const cosineSimilarity = (a, b) => {
   const dot = a.reduce((sum, val, i) => sum + val * b[i], 0);
