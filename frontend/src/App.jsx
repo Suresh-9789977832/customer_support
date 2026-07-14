@@ -16,7 +16,7 @@ function App() {
     try {
       const token = localStorage.getItem("Token");
 
-      const res = await axios.get("http://localhost:5000/auth/getprofile",
+      const res = await axios.get("https://askmydocs-7zjl.onrender.com/auth/getprofile",
         {
           headers:{
             Authorization: `Bearer ${token}`

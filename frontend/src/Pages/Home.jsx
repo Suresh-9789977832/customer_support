@@ -32,7 +32,7 @@ const Home = ({data,setdata}) => {
     try {
       const token = localStorage.getItem("Token");
 
-      const res = await axios.get("http://localhost:5000/auth/getprofile",
+      const res = await axios.get("https://askmydocs-7zjl.onrender.com/auth/getprofile",
         {
           headers:{
             Authorization: `Bearer ${token}`
@@ -62,7 +62,7 @@ const Home = ({data,setdata}) => {
       const formData = new FormData();
       formData.append("file", file);
 
-      const res = await axios.post("http://localhost:5000/api/upload", formData);
+      const res = await axios.post("https://askmydocs-7zjl.onrender.com/api/upload", formData);
       console.log(res.data);
       setUploaded(true);
     } catch (err) {
@@ -78,7 +78,7 @@ const Home = ({data,setdata}) => {
     setAsking(true);
     setAskError("");
     try {
-      const res = await axios.post("http://localhost:5000/api/chat", { question });
+      const res = await axios.post("https://askmydocs-7zjl.onrender.com/api/chat", { question });
       const response = res.data.answer;
       const cleanAnswer = response.replace(/<think>[\s\S]*?<\/think>/g, "").trim();
       setAnswer(cleanAnswer);

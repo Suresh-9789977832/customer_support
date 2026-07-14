@@ -36,7 +36,7 @@ function Signup({ onSuccess, onGoToLogin, data, setdata }) {
     setLoading(true);
     setError("");
     try {
-      const res = await axios.post("http://localhost:5000/auth/signup", {
+      const res = await axios.post("https://askmydocs-7zjl.onrender.com/auth/signup", {
         name,
         email,
         password,
